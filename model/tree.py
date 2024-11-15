@@ -24,6 +24,28 @@ class TreeN:
             parent.children.append(NodeN(person))
             self.size += 1
 
+    def print_level(self, node, level):
+        if node is None:
+            return
+        if level == 1:
+            print(node.data.name, end=' ')
+        elif level > 1:
+            for child in node.children:
+                self.print_level(child, level - 1)
+
+    def print_by_level(self):
+        h = self.height(self.root)
+        for i in range(1, h + 1):
+            self.print_level(self.root, i)
+            print()
+
+    def height(self, node):
+        if node is None:
+            return 0
+        if not node.children:
+            return 1
+        return 1 + max(self.height(child) for child in node.children)
+
 
 
 class Person:
@@ -64,3 +86,14 @@ try:
     print(f"Tamaño del árbol: {tree.size}")
 except TreeNException as e:
     print(f"Error: {e}")
+if __name__ == '__main__':
+    tree = TreeN()
+    tree.add(Person(1, "Root"))
+    tree.add(Person(2, "Child 1"), parent_id=1)
+    tree.add(Person(3, "Child 2"), parent_id=1)
+    tree.add(Person(4, "Grandchild 1"), parent_id=2)
+    tree.add(Person(5, "Grandchild 2"), parent_id=2)
+
+    print("Nodes by level: ")
+    tree.print_by_level()
+
